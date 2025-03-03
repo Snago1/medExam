@@ -1,0 +1,116 @@
+/* Основные стили для страницы теста */
+.test-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Заголовок вопроса */
+.test-page h2 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.test-page h3 {
+  font-size: 1.2rem;
+  color: #34495e;
+  margin-bottom: 20px;
+}
+
+/* Список ответов */
+.answers-list {
+  list-style: none;
+  padding: 0;
+}
+
+.answers-list li {
+  margin: 10px 0;
+}
+
+.answers-list label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.answers-list input[type="radio"] {
+  margin-right: 10px;
+}
+
+/* Кнопки */
+.check-button,
+.next-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #3498db;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.check-button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.check-button:hover:not(:disabled),
+.next-button:hover {
+  background-color: #2980b9;
+}
+
+/* Результат и объяснение */
+.result-explanation {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-left: 4px solid #3498db;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.result-explanation p.correct {
+  color: #27ae60;
+}
+
+.result-explanation p.incorrect {
+  color: #e74c3c;
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Блок с объяснением */
+.explanation {
+  margin-top: 15px;
+}
+
+.explanation h4 {
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.explanation p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.explanation ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.explanation ul li {
+  margin-bottom: 5px;
+}
