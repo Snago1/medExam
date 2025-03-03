@@ -5,7 +5,7 @@ import "./HomePage.css"; // Импорт CSS
 const HomePage = () => {
   return (
     <div className="home-page">
-      <h1>Добро пожаловать в MedExam Prep!</h1>
+      <h1> MedExam Prep!</h1>
       <nav>
         <ul>
           <li>
