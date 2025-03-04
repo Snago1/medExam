@@ -4,14 +4,20 @@ import "./TestPage.css"; // Импорт стилей
 
 const TestPage = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [selectedAnswers, setSelectedAnswers] = useState([]); // Теперь это массив
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
 
   const currentQuestion = questions[currentQuestionIndex];
 
   const handleAnswerSelect = (answer) => {
-    setSelectedAnswer(answer);
+    if (selectedAnswers.includes(answer)) {
+      // Если ответ уже выбран, удаляем его
+      setSelectedAnswers(selectedAnswers.filter((a) => a !== answer));
+    } else {
+      // Иначе добавляем его
+      setSelectedAnswers([...selectedAnswers, answer]);
+    }
   };
 
   const handleCheckAnswer = () => {
@@ -19,20 +25,28 @@ const TestPage = () => {
   };
 
   const handleNextQuestion = () => {
-    if (selectedAnswer?.isCorrect) {
-      setScore(score + 1);
+    // Проверка правильности ответов для вопросов с множественным выбором
+    if (currentQuestion.type === "multiple") {
+      const isCorrect =
+        selectedAnswers.length === currentQuestion.correctAnswers.length &&
+        selectedAnswers.every((answer) => answer.isCorrect);
+      if (isCorrect) {
+        setScore(score + 1);
+      }
+    } else {
+      // Для одиночного выбора
+      if (selectedAnswers[0]?.isCorrect) {
+        setScore(score + 1);
+      }
     }
-    setSelectedAnswer(null);
+
+    setSelectedAnswers([]); // Сброс выбранных ответов
     setShowResult(false);
 
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      alert(
-        `Тест завершен! Ваш результат: ${
-          score + (selectedAnswer?.isCorrect ? 1 : 0)
-        } из ${questions.length}`
-      );
+      alert(`Тест завершен! Ваш результат: ${score} из ${questions.length}`);
     }
   };
 
@@ -49,9 +63,11 @@ const TestPage = () => {
           <li key={index}>
             <label>
               <input
-                type="radio"
+                type={
+                  currentQuestion.type === "multiple" ? "checkbox" : "radio"
+                } // Используем checkbox для множественного выбора
                 name="answer"
-                checked={selectedAnswer === answer}
+                checked={selectedAnswers.includes(answer)} // Проверяем, выбран ли ответ
                 onChange={() => handleAnswerSelect(answer)}
               />
               {answer.text}
@@ -64,7 +80,7 @@ const TestPage = () => {
       <button
         className="check-button"
         onClick={handleCheckAnswer}
-        disabled={!selectedAnswer}
+        disabled={selectedAnswers.length === 0} // Кнопка активна, если выбран хотя бы один ответ
       >
         Проверить ответ
       </button>
@@ -72,8 +88,27 @@ const TestPage = () => {
       {/* Результат и объяснение */}
       {showResult && (
         <div className="result-explanation">
-          <p className={selectedAnswer?.isCorrect ? "correct" : "incorrect"}>
-            {selectedAnswer?.isCorrect
+          <p
+            className={
+              currentQuestion.type === "multiple"
+                ? selectedAnswers.every((answer) => answer.isCorrect) &&
+                  selectedAnswers.length ===
+                    currentQuestion.correctAnswers.length
+                  ? "correct"
+                  : "incorrect"
+                : selectedAnswers[0]?.isCorrect
+                ? "correct"
+                : "incorrect"
+            }
+          >
+            {currentQuestion.type === "multiple"
+              ? selectedAnswers.every((answer) => answer.isCorrect) &&
+                selectedAnswers.length === currentQuestion.correctAnswers.length
+                ? "Правильно!"
+                : `Неправильно. Правильные ответы: ${currentQuestion.correctAnswers.join(
+                    ", "
+                  )}`
+              : selectedAnswers[0]?.isCorrect
               ? "Правильно!"
               : `Неправильно. Правильный ответ: ${currentQuestion.correctAnswer}`}
           </p>

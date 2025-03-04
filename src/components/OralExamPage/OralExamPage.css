@@ -1,0 +1,38 @@
+.oral-exam-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.navigation {
+  margin-bottom: 20px;
+}
+.home-link {
+  color: #007bff;
+  text-decoration: none;
+}
+.home-link:hover {
+  text-decoration: underline;
+}
+.section {
+  margin-bottom: 20px;
+}
+.test-questions-section {
+  margin-top: 20px;
+}
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.references-section {
+  margin-top: 20px;
+}
+.reference {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.reference h5 {
+  margin-top: 0;
+}
