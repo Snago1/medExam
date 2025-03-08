@@ -61,6 +61,34 @@
 .next-button:hover {
   background-color: #2980b9;
 }
+/* Основные стили для кнопки "Пропустить вопрос" */
+.skip-button {
+  background-color: #f0ad4e; /* Оранжевый цвет для выделения */
+  color: white; /* Белый текст */
+  border: none; /* Убираем границу */
+  padding: 10px 20px; /* Отступы внутри кнопки */
+  margin: 10px 5px; /* Отступы снаружи кнопки */
+  border-radius: 5px; /* Закругленные углы */
+  font-size: 16px; /* Размер текста */
+  cursor: pointer; /* Курсор в виде указателя */
+  transition: background-color 0.3s ease; /* Плавное изменение цвета */
+}
+
+/* Стили при наведении на кнопку */
+.skip-button:hover {
+  background-color: #ec971f; /* Темнее оранжевый при наведении */
+}
+
+/* Стили для активной кнопки (когда нажата) */
+.skip-button:active {
+  background-color: #d58512; /* Еще темнее оранжевый при нажатии */
+}
+
+/* Стили для отключенной кнопки */
+.skip-button:disabled {
+  background-color: #cccccc; /* Серый цвет */
+  cursor: not-allowed; /* Курсор "недоступно" */
+}
 
 /* Результат и объяснение */
 .result-explanation {

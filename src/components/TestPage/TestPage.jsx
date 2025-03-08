@@ -4,9 +4,10 @@ import "./TestPage.css"; // Импорт стилей
 
 const TestPage = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState([]); // Теперь это массив
+  const [selectedAnswers, setSelectedAnswers] = useState([]); // Массив выбранных ответов
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
+  const [skippedQuestions, setSkippedQuestions] = useState([]); // Массив пропущенных вопросов
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -47,6 +48,26 @@ const TestPage = () => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       alert(`Тест завершен! Ваш результат: ${score} из ${questions.length}`);
+      if (skippedQuestions.length > 0) {
+        alert(`Вы пропустили ${skippedQuestions.length} вопросов.`);
+      }
+    }
+  };
+
+  const handleSkipQuestion = () => {
+    // Добавляем текущий вопрос в массив пропущенных
+    setSkippedQuestions([...skippedQuestions, currentQuestionIndex]);
+    setSelectedAnswers([]); // Сброс выбранных ответов
+    setShowResult(false);
+
+    // Переход к следующему вопросу
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      alert(`Тест завершен! Ваш результат: ${score} из ${questions.length}`);
+      if (skippedQuestions.length > 0) {
+        alert(`Вы пропустили ${skippedQuestions.length} вопросов.`);
+      }
     }
   };
 
@@ -83,6 +104,11 @@ const TestPage = () => {
         disabled={selectedAnswers.length === 0} // Кнопка активна, если выбран хотя бы один ответ
       >
         Проверить ответ
+      </button>
+
+      {/* Кнопка "Пропустить вопрос" */}
+      <button className="skip-button" onClick={handleSkipQuestion}>
+        Пропустить вопрос
       </button>
 
       {/* Результат и объяснение */}
