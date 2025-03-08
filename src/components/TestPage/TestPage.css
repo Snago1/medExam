@@ -89,7 +89,26 @@
   background-color: #cccccc; /* Серый цвет */
   cursor: not-allowed; /* Курсор "недоступно" */
 }
+/* Стили для кнопки "Вернуться к пропущенным вопросам" */
+.review-button {
+  background-color: #d9534f; /* Красный цвет для выделения */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
+.review-button:hover {
+  background-color: #c9302c; /* Темнее красный при наведении */
+}
+
+.review-button:active {
+  background-color: #ac2925; /* Еще темнее красный при нажатии */
+}
 /* Результат и объяснение */
 .result-explanation {
   margin-top: 20px;

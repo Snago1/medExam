@@ -8,8 +8,11 @@ const TestPage = () => {
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
   const [skippedQuestions, setSkippedQuestions] = useState([]); // Массив пропущенных вопросов
+  const [isReviewMode, setIsReviewMode] = useState(false); // Режим пропущенных вопросов
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = isReviewMode
+    ? questions[skippedQuestions[currentQuestionIndex]]
+    : questions[currentQuestionIndex];
 
   const handleAnswerSelect = (answer) => {
     if (selectedAnswers.includes(answer)) {
@@ -44,12 +47,28 @@ const TestPage = () => {
     setSelectedAnswers([]); // Сброс выбранных ответов
     setShowResult(false);
 
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    if (isReviewMode) {
+      // В режиме пропущенных вопросов
+      if (currentQuestionIndex < skippedQuestions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        alert("Все пропущенные вопросы пройдены!");
+        setIsReviewMode(false); // Выход из режима пропущенных вопросов
+      }
     } else {
-      alert(`Тест завершен! Ваш результат: ${score} из ${questions.length}`);
-      if (skippedQuestions.length > 0) {
-        alert(`Вы пропустили ${skippedQuestions.length} вопросов.`);
+      // В основном режиме
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        if (skippedQuestions.length > 0) {
+          alert(
+            `Тест завершен! Ваш результат: ${score} из ${questions.length}. Вы пропустили ${skippedQuestions.length} вопросов.`
+          );
+        } else {
+          alert(
+            `Тест завершен! Ваш результат: ${score} из ${questions.length}`
+          );
+        }
       }
     }
   };
@@ -71,10 +90,19 @@ const TestPage = () => {
     }
   };
 
+  const handleReviewSkippedQuestions = () => {
+    setIsReviewMode(true); // Включаем режим пропущенных вопросов
+    setCurrentQuestionIndex(0); // Начинаем с первого пропущенного вопроса
+  };
+
   return (
     <div className="test-page">
       <h2>
-        Вопрос {currentQuestionIndex + 1} из {questions.length}
+        {isReviewMode
+          ? `Пропущенный вопрос ${currentQuestionIndex + 1} из ${
+              skippedQuestions.length
+            }`
+          : `Вопрос ${currentQuestionIndex + 1} из ${questions.length}`}
       </h2>
       <h3>{currentQuestion.question}</h3>
 
@@ -106,10 +134,24 @@ const TestPage = () => {
         Проверить ответ
       </button>
 
-      {/* Кнопка "Пропустить вопрос" */}
-      <button className="skip-button" onClick={handleSkipQuestion}>
-        Пропустить вопрос
-      </button>
+      {/* Кнопка "Пропустить вопрос" (только в основном режиме) */}
+      {!isReviewMode && (
+        <button className="skip-button" onClick={handleSkipQuestion}>
+          Пропустить вопрос
+        </button>
+      )}
+
+      {/* Кнопка "Вернуться к пропущенным вопросам" (после завершения теста) */}
+      {!isReviewMode &&
+        currentQuestionIndex === questions.length - 1 &&
+        skippedQuestions.length > 0 && (
+          <button
+            className="review-button"
+            onClick={handleReviewSkippedQuestions}
+          >
+            Вернуться к пропущенным вопросам
+          </button>
+        )}
 
       {/* Результат и объяснение */}
       {showResult && (
@@ -141,7 +183,11 @@ const TestPage = () => {
 
           {/* Кнопка "Следующий вопрос" или "Завершить тест" */}
           <button className="next-button" onClick={handleNextQuestion}>
-            {currentQuestionIndex < questions.length - 1
+            {isReviewMode
+              ? currentQuestionIndex < skippedQuestions.length - 1
+                ? "Следующий пропущенный вопрос"
+                : "Завершить"
+              : currentQuestionIndex < questions.length - 1
               ? "Следующий вопрос"
               : "Завершить тест"}
           </button>
